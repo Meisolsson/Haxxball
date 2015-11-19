@@ -1,7 +1,7 @@
 var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
 
 var PLAYER_SPEED_CHANGE = 15;
-var BALL_SPEED_CHANGE = 15;
+var BALL_SPEED_CHANGE = 40;
 
 var platforms;
 var player;
@@ -57,8 +57,8 @@ function update() {
     
     if(game.input.keyboard.isDown(Phaser.KeyCode.SPACEBAR) && game.physics.arcade.distanceBetween(player, ball) < 46){
         var angle = game.physics.arcade.angleBetween(player, ball);
-        var velX = Math.cos(angle) * 40;
-        var velY = Math.sin(angle) * 40;
+        var velX = Math.cos(angle) * BALL_SPEED_CHANGE;
+        var velY = Math.sin(angle) * BALL_SPEED_CHANGE;
         ball.body.velocity.add(velX, velY);
     }
 }
