@@ -28,7 +28,7 @@ function create() {
     player.body.drag = new Phaser.Point(20, 20);
     player.body.collideWorldBounds = true;
 	
-	ball = game.add.sprite(128, game.world.height - 150, 'player');
+	ball = game.add.sprite(129, game.world.height - 150, 'player');
     game.physics.arcade.enable(ball);
 	
     ball.scale = new Phaser.Point(0.7, 0.7);
