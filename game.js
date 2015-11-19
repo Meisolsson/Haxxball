@@ -22,7 +22,7 @@ function create() {
     ground.body.immovable = true;*/
 	
 	
-	player = game.add.sprite(32, game.world.height - 150, 'player');
+	player = game.add.sprite(16, game.world.height - 150, 'player');
     game.physics.arcade.enable(player);
     player.body.maxVelocity = new Phaser.Point(90, 90);
     player.body.drag = new Phaser.Point(20, 20);
