@@ -36,7 +36,7 @@ function create() {
 	
     stateManager = new Phaser.StateManager(this.game);
     timer = game.time.create(false);
-    
+    game.stage.backgroundColor = "#006600";
     
     text = game.add.text(game.width / 2, 100, playerOneScore + " - " + playerTwoScore, {"fill":"white"});
     bigText = game.add.text(game.width / 2, game.height / 2, "", {"fill":"white", "fontSize": 64});
