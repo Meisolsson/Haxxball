@@ -139,6 +139,7 @@ function resetField(){
     var ballCenterX = (game.width / 2) - (ball.width / 2);
     var ballCenterY = (game.height / 2) - (ball.height / 2);
     ball.position.set(ballCenterX, ballCenterY);
+    ball.body.velocity.set(0,0);
     
     var playerCenterY = (game.height / 2) - (playerOne.height / 2);
     playerOne.position.set(playerOneGoal.x + 100, playerCenterY);
