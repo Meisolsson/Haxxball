@@ -55,9 +55,9 @@ function setGameOver(){
 }
 function update() {
 	game.physics.arcade.collide(playerOne, ball);
-    game.physics.arcade.collide(ball,playerOneGoal);
-    game.physics.arcade.collide(ball,playerTwoGoal);
-    this.physics.arcade.collide(this.ball, this.playerOneGoal, this.setGameOver, null, this);
+    game.physics.arcade.collide(ball, playerOneGoal);
+    game.physics.arcade.collide(ball, playerTwoGoal);
+    game.physics.arcade.collide(ball, playerOneGoal, setGameOver(), null, this);
 	var cursors = game.input.keyboard.createCursorKeys();
 
     if (cursors.left.isDown){
