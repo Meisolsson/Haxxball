@@ -1,11 +1,11 @@
 var game = new Phaser.Game(1200, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
 
 var PLAYER_SPEED_CHANGE = 15;
-var BALL_SPEED_CHANGE = 16.5;
+var BALL_SPEED_CHANGE = 2;
 
 //Players
 var playerOne;
-var PlayerTwo;
+var playerTwo;
 
 //Static objects
 var playerOneGoal;
@@ -17,12 +17,11 @@ var playerOneScore = 0;
 var playerTwoScore = 0;
 var text;
 var bigText;
-var resetting
+var resetting;
 
 //
 var timer;
 var stateManager;
-
 var text;
 
 function preload() {
@@ -32,47 +31,67 @@ function preload() {
 }
 
 function create() {
-	game.physics.startSystem(Phaser.Physics.ARCADE)
-	
+	game.physics.startSystem(Phaser.Physics.P2JS);
+    game.physics.p2.setImpactEvents(true);
+    
     stateManager = new Phaser.StateManager(this.game);
     timer = game.time.create(false);
     
-    
     text = game.add.text(game.width / 2, 100, playerOneScore + " - " + playerTwoScore, {"fill":"white"});
     bigText = game.add.text(game.width / 2, game.height / 2, "", {"fill":"white", "fontSize": 64});
-    ball = game.add.sprite(128, game.world.height - 150, 'ball');
-    playerOne = game.add.sprite(1, game.world.height - 150, 'player');
-    playerOneGoal = game.add.sprite(50, 100, 'ground');
-    playerTwoGoal = game.add.sprite(1125, 100, 'ground');
-    
-    game.physics.arcade.enable(playerOne);
-    game.physics.arcade.enable(playerOneGoal);
-    game.physics.arcade.enable(playerTwoGoal);
-    game.physics.arcade.enable(ball);
-    
-    playerOneGoal.body.immovable = true;
-    playerTwoGoal.body.immovable = true;
-    
-    playerOne.body.maxVelocity = new Phaser.Point(160, 160);
-    playerOne.body.drag = new Phaser.Point(300, 300);
-
-    ball.body.maxVelocity = new Phaser.Point(200, 200);
-	ball.body.bounce = new Phaser.Point(0.4, 0.4);
-	ball.body.drag = new Phaser.Point(35, 35);
-    ball.body.collideWorldBounds = true;
-    ball.tint = Math.random() * 0xFFFFFF<<0;
     
     text.anchor.set(0.5, 0.5);
     bigText.anchor.set(0.5, 0.5);
+    
+    var playerCollisionGroup = game.physics.p2.createCollisionGroup();
+    var goalCollisionGroup = game.physics.p2.createCollisionGroup();
+    var ballCollisionGroup = game.physics.p2.createCollisionGroup();
+    
+    playerOneGoal = game.add.sprite(50, game.height / 2, 'ground');
+    playerTwoGoal = game.add.sprite(1125, game.height / 2, 'ground');
+    playerOne = game.add.sprite(playerOneGoal.x + 100, game.height / 2, 'player');
+    playerTwo = game.add.sprite(playerTwoGoal.x - 100, game.height / 2, 'player');
+    ball = game.add.sprite(game.width / 2,game.height / 2, 'ball');
+    
+    game.physics.p2.enable(ball);
+    game.physics.p2.enable(playerOne);
+    game.physics.p2.enable(playerTwo);
+    game.physics.p2.enable(playerOneGoal);
+    game.physics.p2.enable(playerTwoGoal);
+    
+    game.physics.p2.updateBoundsCollisionGroup();
+    
+    playerOneGoal.body.setCollisionGroup(goalCollisionGroup);
+    playerTwoGoal.body.setCollisionGroup(goalCollisionGroup);  
+    playerOneGoal.body.collides(ballCollisionGroup);
+    playerTwoGoal.body.collides(ballCollisionGroup);
+    playerOneGoal.body.static = true;
+    playerTwoGoal.body.static = true;
+    
+    playerOne.body.setCollisionGroup(playerCollisionGroup);
+    playerTwo.body.setCollisionGroup(playerCollisionGroup);
+    playerOne.body.collides(ballCollisionGroup);
+    playerTwo.body.collides(ballCollisionGroup);
+    
+    ball.body.setCollisionGroup(ballCollisionGroup);
+    ball.body.collides(goalCollisionGroup, setGameOver, this);
+    ball.body.collides(playerCollisionGroup);
+   
+    playerOne.body.damping = 0.4;
+    playerOne.body.fixedRotation = true;
+    
+    playerTwo.body.damping = 0.4;
+    playerTwo.body.fixedRotation = true;
+    
+	ball.body.damping = 0.4;
+    ball.tint = Math.random() * 0xFFFFFF<<0;
+    ball.body.fixedRotation = true;
+    
 }
 
 function update() {
     if(resetting)
         return;
-    
-	game.physics.arcade.collide(playerOne, ball);
-    game.physics.arcade.collide(ball, playerOneGoal, setGameOver);
-    game.physics.arcade.collide(ball, playerTwoGoal, setGameOver);
     
 	var cursors = game.input.keyboard.createCursorKeys();
     
@@ -88,16 +107,19 @@ function update() {
 		playerOne.body.velocity.y += PLAYER_SPEED_CHANGE;
 	}
     
-    if(game.input.keyboard.isDown(Phaser.KeyCode.SPACEBAR) && game.physics.arcade.distanceBetween(playerOne, ball) < 46){
-        var angle = game.physics.arcade.angleBetween(playerOne, ball);
-        var velX = Math.cos(angle) * BALL_SPEED_CHANGE;
-        var velY = Math.sin(angle) * BALL_SPEED_CHANGE;
+    if(game.input.keyboard.isDown(Phaser.KeyCode.SPACEBAR) && game.math.distance(playerOne.x, playerOne.y, ball.x, ball.y) < 46){
+        var angle = game.math.angleBetween(playerOne.x, playerOne.y, ball.x, ball.y);
+        var velX = -Math.cos(angle) * BALL_SPEED_CHANGE;
+        var velY = -Math.sin(angle) * BALL_SPEED_CHANGE;
         
-        ball.body.velocity.add(velX, velY);
+        ball.body.applyImpulseLocal([velX, velY], 0 ,0);
     }
 }
     
-function setGameOver(ball, goal){
+function setGameOver(ball, goal, t, v){
+    if(resetting)
+        return;
+    
     if(goal == playerOneGoal){
         playerTwoScore++;
         bigText.setText("Player two scored");
@@ -110,7 +132,6 @@ function setGameOver(ball, goal){
     
     timer.add(3000, resetField, this);
     timer.start();
-    
 }
 
 function resetField(){
