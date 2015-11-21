@@ -51,7 +51,7 @@ function create() {
     ball.tint = Math.random() * 0xFFFFFF<<0;
 }
 function setGameOver(){
-
+    console.log("Game Over")
 }
 function update() {
 	game.physics.arcade.collide(playerOne, ball);
