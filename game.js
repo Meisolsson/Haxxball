@@ -40,12 +40,14 @@ function create() {
     
     text = game.add.text(game.width / 2, 100, playerOneScore + " - " + playerTwoScore, {"fill":"white"});
     bigText = game.add.text(game.width / 2, game.height / 2, "", {"fill":"white", "fontSize": 64});
-    ball = game.add.sprite(128, game.world.height - 150, 'ball');
-    playerOne = game.add.sprite(1, game.world.height - 150, 'player');
+    ball = game.add.sprite(game.width / 2,game.height / 2, 'ball');
     playerOneGoal = game.add.sprite(50, 100, 'ground');
     playerTwoGoal = game.add.sprite(1125, 100, 'ground');
+    playerOne = game.add.sprite(playerOneGoal.x + 100, game.height / 2, 'player');
+    PlayerTwo = game.add.sprite(playerTwoGoal.x - 100, game.height / 2, 'player');
     
     game.physics.arcade.enable(playerOne);
+    game.physics.arcade.enable(PlayerTwo);
     game.physics.arcade.enable(playerOneGoal);
     game.physics.arcade.enable(playerTwoGoal);
     game.physics.arcade.enable(ball);
@@ -55,6 +57,9 @@ function create() {
     
     playerOne.body.maxVelocity = new Phaser.Point(160, 160);
     playerOne.body.drag = new Phaser.Point(300, 300);
+    
+    PlayerTwo.body.maxVelocity = new Phaser.Point(160, 160);
+    PlayerTwo.body.drag = new Phaser.Point(300, 300);
 
     ball.body.maxVelocity = new Phaser.Point(200, 200);
 	ball.body.bounce = new Phaser.Point(0.4, 0.4);
@@ -71,6 +76,7 @@ function update() {
         return;
     
 	game.physics.arcade.collide(playerOne, ball);
+    game.physics.arcade.collide(PlayerTwo, ball);
     game.physics.arcade.collide(ball, playerOneGoal, setGameOver);
     game.physics.arcade.collide(ball, playerTwoGoal, setGameOver);
     
@@ -118,6 +124,7 @@ function resetField(){
     var ballCenterX = (game.width / 2) - (ball.width / 2);
     var ballCenterY = (game.height / 2) - (ball.height / 2);
     ball.position.set(ballCenterX, ballCenterY);
+    ball.body.velocity.set(0,0);
     
     var playerCenterY = (game.height / 2) - (playerOne.height / 2);
     playerOne.position.set(playerOneGoal.x + 100, playerCenterY);
