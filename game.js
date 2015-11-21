@@ -74,8 +74,8 @@ function create() {
     playerTwo.body.collides(ballCollisionGroup);
     
     ball.body.setCollisionGroup(ballCollisionGroup);
-    ball.body.collides(goalCollisionGroup, setGameOver, this);
-    ball.body.collides(playerCollisionGroup);
+    ball.body.collides([goalCollisionGroup, playerCollisionGroup]);
+    ball.body.createGroupCallback(goalCollisionGroup, setGameOver, this)
    
     playerOne.body.damping = 0.4;
     playerOne.body.fixedRotation = true;
@@ -90,9 +90,6 @@ function create() {
 }
 
 function update() {
-    if(resetting)
-        return;
-    
 	var cursors = game.input.keyboard.createCursorKeys();
     
     if (cursors.left.isDown){
@@ -120,7 +117,7 @@ function setGameOver(ball, goal, t, v){
     if(resetting)
         return;
     
-    if(goal == playerOneGoal){
+    if(goal.id == playerOneGoal.body.id){
         playerTwoScore++;
         bigText.setText("Player two scored");
     }else{ 
@@ -136,12 +133,10 @@ function setGameOver(ball, goal, t, v){
 
 function resetField(){
     bigText.setText("");
-    var ballCenterX = (game.width / 2) - (ball.width / 2);
-    var ballCenterY = (game.height / 2) - (ball.height / 2);
-    ball.position.set(ballCenterX, ballCenterY);
-    ball.body.velocity.set(0,0);
     
-    var playerCenterY = (game.height / 2) - (playerOne.height / 2);
-    playerOne.position.set(playerOneGoal.x + 100, playerCenterY);
+    ball.body.reset(game.width / 2, game.height / 2);
+    playerOne.body.reset(playerOneGoal.x + 100,  game.height / 2);
+    playerTwo.body.reset(playerTwoGoal.x - 100,  game.height / 2);
+    
     resetting = false;
 }
