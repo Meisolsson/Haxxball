@@ -12,6 +12,8 @@ var score = 0;
 var playerOneGoal;
 var playerTwoGoal;
 
+var text;
+
 function preload() {
 	game.load.image('ground', 'assets/platform.png');
 	game.load.image('player', 'assets/player.png');
@@ -42,16 +44,20 @@ function create() {
 	ball.body.drag = new Phaser.Point(35, 35);
     ball.body.collideWorldBounds = true;
     ball.tint = Math.random() * 0xFFFFFF<<0;
+    
+    text = game.add.text(200, 200, score, {"fill":"white"});
+    
 }
 
 function setGameOver(){
-    console.log("Game Over");
+    text.setText(score++);
 }
 
 function update() {
 	game.physics.arcade.collide(playerOne, ball);
     game.physics.arcade.collide(ball, playerOneGoal, setGameOver);
     game.physics.arcade.collide(ball, playerTwoGoal, setGameOver);
+    
 	var cursors = game.input.keyboard.createCursorKeys();
 
     if (cursors.left.isDown){
