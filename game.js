@@ -13,7 +13,8 @@ var playerTwoGoal;
 var ball;
 
 //Game data
-var score = 0;
+var playerOneScore = 0;
+var playerTwoScore = 0;
 var text;
 var resetting
 
@@ -36,7 +37,7 @@ function create() {
     timer = game.time.create(false);
     
     
-    text = game.add.text(200, 200, score, {"fill":"white"});
+    text = game.add.text(game.width / 2, 100, playerOneScore + " - " + playerTwoScore, {"fill":"white"});
     ball = game.add.sprite(128, game.world.height - 150, 'ball');
     playerOne = game.add.sprite(1, game.world.height - 150, 'player');
     playerOneGoal = game.add.sprite(50, 100, 'ground');
@@ -59,6 +60,7 @@ function create() {
     ball.body.collideWorldBounds = true;
     ball.tint = Math.random() * 0xFFFFFF<<0;
     
+    text.anchor.set(0.5, 0.5);
 }
 
 function update() {
@@ -92,8 +94,13 @@ function update() {
     }
 }
     
-function setGameOver(){
-    text.setText(score++);
+function setGameOver(ball, goal){
+    if(goal == playerOneGoal)
+        playerTwoScore++;
+    else 
+        playerOneScore++;
+        
+    text.setText(playerOneScore + " - " + playerTwoScore);
     resetting = true;
     
     timer.add(3000, resetField, this);
