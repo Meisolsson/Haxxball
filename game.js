@@ -23,8 +23,8 @@ function preload() {
 function create() {
 	game.physics.startSystem(Phaser.Physics.ARCADE)
 	
-    ball = game.add.sprite(128, game.world.height - 150, 'ball');
-    playerOne = game.add.sprite(1, game.world.height - 150, 'player');
+    ball = game.add.sprite(game.world.width/2, game.world.height/2, 'ball');
+    playerOne = game.add.sprite(game.world.width/2 - 100, game.world.height/2 - 16, 'player');
     playerOneGoal = game.add.sprite(50, 100, 'ground');
     playerTwoGoal = game.add.sprite(1125, 100, 'ground');
     
@@ -39,7 +39,6 @@ function create() {
     playerOne.body.maxVelocity = new Phaser.Point(160, 160);
     playerOne.body.drag = new Phaser.Point(300, 300);
 	
-    ball.scale = new Phaser.Point(0.7, 0.7);
 	ball.body.bounce = new Phaser.Point(0.4, 0.4);
 	ball.body.drag = new Phaser.Point(35, 35);
     ball.body.collideWorldBounds = true;
