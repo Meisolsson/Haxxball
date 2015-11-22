@@ -72,8 +72,8 @@ function create() {
     
     playerOne.body.setCollisionGroup(playerCollisionGroup);
     playerTwo.body.setCollisionGroup(playerCollisionGroup);
-    playerOne.body.collides(ballCollisionGroup);
-    playerTwo.body.collides(ballCollisionGroup);
+    playerOne.body.collides([ballCollisionGroup, playerCollisionGroup]);
+    playerTwo.body.collides([ballCollisionGroup, playerCollisionGroup]);
     
     ball.body.setCollisionGroup(ballCollisionGroup);
     ball.body.collides([goalCollisionGroup, playerCollisionGroup]);
