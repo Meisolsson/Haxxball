@@ -2,6 +2,7 @@ var game = new Phaser.Game(1200, 600, Phaser.AUTO, '', { preload: preload, creat
 
 var PLAYER_SPEED_CHANGE = 15;
 var BALL_SPEED_CHANGE = 2;
+var MAX_PLAYER_VELOCITY = 100;
 
 //Players
 var playerOne;
@@ -93,15 +94,15 @@ function create() {
 function update() {
 	var cursors = game.input.keyboard.createCursorKeys();
     
-    if (cursors.left.isDown){
+    if (cursors.left.isDown && playerOne.body.velocity.x > -MAX_PLAYER_VELOCITY){
         playerOne.body.velocity.x -= PLAYER_SPEED_CHANGE;
-    } else if (cursors.right.isDown){
+    } else if (cursors.right.isDown && playerOne.body.velocity.x < MAX_PLAYER_VELOCITY){
         playerOne.body.velocity.x += PLAYER_SPEED_CHANGE;
 	}
     
-    if (cursors.up.isDown){
+    if (cursors.up.isDown && playerOne.body.velocity.y > -MAX_PLAYER_VELOCITY){
         playerOne.body.velocity.y -= PLAYER_SPEED_CHANGE;
-    }else if(cursors.down.isDown){
+    }else if(cursors.down.isDown && playerOne.body.velocity.y < MAX_PLAYER_VELOCITY){
 		playerOne.body.velocity.y += PLAYER_SPEED_CHANGE;
 	}
     
