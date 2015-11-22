@@ -33,6 +33,7 @@ function preload() {
 function create() {
 	game.physics.startSystem(Phaser.Physics.P2JS);
     game.physics.p2.setImpactEvents(true);
+    game.stage.backgroundColor = '#009933';
     
     stateManager = new Phaser.StateManager(this.game);
     timer = game.time.create(false);
