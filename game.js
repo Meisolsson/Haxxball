@@ -41,11 +41,7 @@ function create() {
     stateManager = new Phaser.StateManager(this.game);
     timer = game.time.create(false);
     
-    text = game.add.text(game.width / 2, 100, playerOneScore + " - " + playerTwoScore, {"fill":"white"});
-    bigText = game.add.text(game.width / 2, game.height / 2, "", {"fill":"white", "fontSize": 64});
     
-    text.anchor.set(0.5, 0.5);
-    bigText.anchor.set(0.5, 0.5);
     
     var playerCollisionGroup = game.physics.p2.createCollisionGroup();
     var goalCollisionGroup = game.physics.p2.createCollisionGroup();
@@ -89,7 +85,7 @@ function create() {
     sideLineR.body.static = true;
     
     playerOneGoal.body.setCollisionGroup(goalCollisionGroup);
-    playerTwoGoal.body.setCollisionGroup(goalCollisionGroup);  
+    playerTwoGoal.body.setCollisionGroup(goalCollisionGroup);
     playerOneGoal.body.collides(ballCollisionGroup);
     playerTwoGoal.body.collides(ballCollisionGroup);
     playerOneGoal.body.static = true;
@@ -106,13 +102,20 @@ function create() {
    
     playerOne.body.damping = 0.4;
     playerOne.body.fixedRotation = true;
+    playerOne.tint = Math.random() * 0xFFFFFF<<0;
     
     playerTwo.body.damping = 0.4;
     playerTwo.body.fixedRotation = true;
+    playerTwo.tint = Math.random() * 0xFFFFFF<<0;
     
 	ball.body.damping = 0.4;
-    ball.tint = Math.random() * 0xFFFFFF<<0;
     ball.body.fixedRotation = true;
+    
+    text = game.add.text(game.width / 2, 100, playerOneScore + " - " + playerTwoScore, {"fill":"white"});
+    bigText = game.add.text(game.width / 2, game.height / 2, "", {"fill":"white", "fontSize": 64});
+    
+    text.anchor.set(0.5, 0.5);
+    bigText.anchor.set(0.5, 0.5);
     
 }
 
