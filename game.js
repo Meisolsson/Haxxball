@@ -29,6 +29,8 @@ function preload() {
 	game.load.image('ground', 'assets/platform.png');
 	game.load.image('player', 'assets/player.png');
     game.load.image('ball', 'assets/ball.png');
+    game.load.image('side_line_tb', 'assets/sideLineTB.png');
+    game.load.image('side_line_lr', 'assets/sideLineLR.png');
 }
 
 function create() {
@@ -48,20 +50,43 @@ function create() {
     var playerCollisionGroup = game.physics.p2.createCollisionGroup();
     var goalCollisionGroup = game.physics.p2.createCollisionGroup();
     var ballCollisionGroup = game.physics.p2.createCollisionGroup();
+    var sideLineCollisionGroup = game.physics.p2.createCollisionGroup();
     
-    playerOneGoal = game.add.sprite(50, game.height / 2, 'ground');
-    playerTwoGoal = game.add.sprite(1125, game.height / 2, 'ground');
+    
+    var sideLineT = game.add.sprite(game.width / 2, 50, 'side_line_tb');
+    var sideLineB = game.add.sprite(game.width / 2, game.height - 50, 'side_line_tb');
+    var sideLineL = game.add.sprite(50, game.height / 2, 'side_line_lr');
+    var sideLineR = game.add.sprite(game.width - 50, game.height / 2, 'side_line_lr');
+    playerOneGoal = game.add.sprite(150, game.height / 2, 'ground');
+    playerTwoGoal = game.add.sprite(game.width - 150, game.height / 2, 'ground');
     playerOne = game.add.sprite(playerOneGoal.x + 100, game.height / 2, 'player');
     playerTwo = game.add.sprite(playerTwoGoal.x - 100, game.height / 2, 'player');
     ball = game.add.sprite(game.width / 2,game.height / 2, 'ball');
     
-    game.physics.p2.enable(ball);
+    game.physics.p2.enable(ball);   
     game.physics.p2.enable(playerOne);
     game.physics.p2.enable(playerTwo);
     game.physics.p2.enable(playerOneGoal);
     game.physics.p2.enable(playerTwoGoal);
+    game.physics.p2.enable(sideLineT);
+    game.physics.p2.enable(sideLineB);    
+    game.physics.p2.enable(sideLineL);
+    game.physics.p2.enable(sideLineR);
     
     game.physics.p2.updateBoundsCollisionGroup();
+    
+    sideLineT.body.setCollisionGroup(sideLineCollisionGroup);
+    sideLineB.body.setCollisionGroup(sideLineCollisionGroup);
+    sideLineL.body.setCollisionGroup(sideLineCollisionGroup);
+    sideLineR.body.setCollisionGroup(sideLineCollisionGroup);
+    sideLineT.body.collides(ballCollisionGroup);
+    sideLineB.body.collides(ballCollisionGroup);
+    sideLineL.body.collides(ballCollisionGroup);
+    sideLineR.body.collides(ballCollisionGroup);
+    sideLineT.body.static = true;
+    sideLineB.body.static = true;
+    sideLineL.body.static = true;
+    sideLineR.body.static = true;
     
     playerOneGoal.body.setCollisionGroup(goalCollisionGroup);
     playerTwoGoal.body.setCollisionGroup(goalCollisionGroup);  
@@ -76,7 +101,7 @@ function create() {
     playerTwo.body.collides([ballCollisionGroup, playerCollisionGroup]);
     
     ball.body.setCollisionGroup(ballCollisionGroup);
-    ball.body.collides([goalCollisionGroup, playerCollisionGroup]);
+    ball.body.collides([goalCollisionGroup, playerCollisionGroup, sideLineCollisionGroup]);
     ball.body.createGroupCallback(goalCollisionGroup, setGameOver, this)
    
     playerOne.body.damping = 0.4;
