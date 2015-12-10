@@ -75,7 +75,7 @@ function create() {
 
 function update() {
 	var cursors = game.input.keyboard.createCursorKeys();
-    
+    //playerone
     if (cursors.left.isDown && playerOne.body.velocity.x > -MAX_PLAYER_VELOCITY){
         playerOne.body.velocity.x -= PLAYER_SPEED_CHANGE;
     } else if (cursors.right.isDown && playerOne.body.velocity.x < MAX_PLAYER_VELOCITY){
@@ -86,6 +86,18 @@ function update() {
         playerOne.body.velocity.y -= PLAYER_SPEED_CHANGE;
     }else if(cursors.down.isDown && playerOne.body.velocity.y < MAX_PLAYER_VELOCITY){
 		playerOne.body.velocity.y += PLAYER_SPEED_CHANGE;
+	}
+    //playertwo
+     if (game.input.keyboard.isDown(Phaser.KeyCode.A) && playerTwo.body.velocity.x > -MAX_PLAYER_VELOCITY){
+        playerTwo.body.velocity.x -= PLAYER_SPEED_CHANGE;
+    } if (game.input.keyboard.isDown(Phaser.KeyCode.D) && playerTwo.body.velocity.x < MAX_PLAYER_VELOCITY){
+        playerTwo.body.velocity.x += PLAYER_SPEED_CHANGE;
+	}
+    
+    if (game.input.keyboard.isDown(Phaser.KeyCode.W) && playerTwo.body.velocity.y > -MAX_PLAYER_VELOCITY){
+        playerTwo.body.velocity.y -= PLAYER_SPEED_CHANGE;
+    }else if(game.input.keyboard.isDown(Phaser.KeyCode.S) && playerTwo.body.velocity.y < MAX_PLAYER_VELOCITY){
+		playerTwo.body.velocity.y += PLAYER_SPEED_CHANGE;
 	}
     
     if(game.input.keyboard.isDown(Phaser.KeyCode.SPACEBAR) && game.math.distance(playerOne.x, playerOne.y, ball.x, ball.y) < 46){
