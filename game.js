@@ -19,8 +19,9 @@ var playerTwoScore = 0;
 var text;
 var bigText;
 var resetting;
+var contactMaterial;
 
-//
+//misc
 var timer;
 var stateManager;
 var text;
@@ -60,10 +61,14 @@ function create() {
     playerTwo = createPlayer(playerTwoGoal.x - 100, game.height / 2, 'player', playerCollisionGroup, [ballCollisionGroup, playerCollisionGroup]);
     ball = createObject(game.width / 2, game.height / 2, 'ball', ballCollisionGroup, [goalCollisionGroup, playerCollisionGroup, sideLineCollisionGroup]);
    
+
     
-    ball.body.createGroupCallback(goalCollisionGroup, setGameOver, this) 
+    ball.body.createGroupCallback(goalCollisionGroup, PlayerScores, this) 
 	ball.body.damping = 0.4;
+   
     ball.body.fixedRotation = true;
+        //var contactMaterial = game.physics.p2.createContactMaterial(sideLineCollisionGroup, ballCollisionGroup);
+         //contactMaterial.restitution = 0.0;
     
     text = game.add.text(game.width / 2, 100, playerOneScore + " - " + playerTwoScore, {"fill":"white"});
     bigText = game.add.text(game.width / 2, game.height / 2, "", {"fill":"white", "fontSize": 64});
@@ -119,8 +124,7 @@ function update() {
     }
 }
     
-function setGameOver(ball, goal, t, v){
-    console.log("TES");
+function PlayerScores(ball, goal, t, v){
     if(resetting)
         return;
     
