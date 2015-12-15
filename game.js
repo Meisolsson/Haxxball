@@ -176,7 +176,7 @@ function createObject(x, y, sprite, collisionGroup, collides, material){
 
 function createPlayer(x, y, sprite, collisionGroup, collides){
     var player = createObject(x, y, sprite, collisionGroup, collides);
-    player.body.damping = 0.4;
+    player.body.damping = 0.99;
     player.body.fixedRotation = true;
     player.tint = Math.random() * 0xFFFFFF<<0;
     
