@@ -47,19 +47,22 @@ function create() {
     var ballCollisionGroup = game.physics.p2.createCollisionGroup();
     var sideLineCollisionGroup = game.physics.p2.createCollisionGroup();
     
+    var ballMaterial = game.physics.p2.createMaterial('ballMaterial');
+    var fieldMaterial = game.physics.p2.createMaterial('fieldMaterial');
+    
     game.physics.p2.updateBoundsCollisionGroup();
     
-    createStaticObject(game.width / 2, 50, 'side_line_tb', sideLineCollisionGroup, ballCollisionGroup);
-    createStaticObject(game.width / 2, game.height - 50, 'side_line_tb', sideLineCollisionGroup, ballCollisionGroup);
-    createStaticObject(50, game.height / 2, 'side_line_lr', sideLineCollisionGroup, ballCollisionGroup);
-    createStaticObject(game.width - 50, game.height / 2, 'side_line_lr', sideLineCollisionGroup, ballCollisionGroup);
+    createStaticObject(game.width / 2, 50, 'side_line_tb', sideLineCollisionGroup, ballCollisionGroup, fieldMaterial);
+    createStaticObject(game.width / 2, game.height - 50, 'side_line_tb', sideLineCollisionGroup, ballCollisionGroup, fieldMaterial);
+    createStaticObject(50, game.height / 2, 'side_line_lr', sideLineCollisionGroup, ballCollisionGroup, fieldMaterial);
+    createStaticObject(game.width - 50, game.height / 2, 'side_line_lr', sideLineCollisionGroup, ballCollisionGroup, fieldMaterial);
     
     playerOneGoal = createStaticObject(150, game.height / 2, 'ground', goalCollisionGroup, ballCollisionGroup);
     playerTwoGoal = createStaticObject(game.width - 150, game.height / 2, 'ground', goalCollisionGroup, ballCollisionGroup);
 
     playerOne = createPlayer(playerOneGoal.x + 100, game.height / 2, 'player', playerCollisionGroup, [ballCollisionGroup, playerCollisionGroup]);
     playerTwo = createPlayer(playerTwoGoal.x - 100, game.height / 2, 'player', playerCollisionGroup, [ballCollisionGroup, playerCollisionGroup]);
-    ball = createObject(game.width / 2, game.height / 2, 'ball', ballCollisionGroup, [goalCollisionGroup, playerCollisionGroup, sideLineCollisionGroup]);
+    ball = createObject(game.width / 2, game.height / 2, 'ball', ballCollisionGroup, [goalCollisionGroup, playerCollisionGroup, sideLineCollisionGroup], ballMaterial);
    
 
     
@@ -67,8 +70,9 @@ function create() {
 	ball.body.damping = 0.4;
    
     ball.body.fixedRotation = true;
-        //var contactMaterial = game.physics.p2.createContactMaterial(sideLineCollisionGroup, ballCollisionGroup);
-         //contactMaterial.restitution = 0.0;
+    var contactMaterial = game.physics.p2.createContactMaterial(ballMaterial, fieldMaterial);
+    contactMaterial.restitution = 0.4;
+
     
     text = game.add.text(game.width / 2, 100, playerOneScore + " - " + playerTwoScore, {"fill":"white"});
     bigText = game.add.text(game.width / 2, game.height / 2, "", {"fill":"white", "fontSize": 64});
@@ -152,24 +156,26 @@ function resetField(){
     resetting = false;
 }
 
-function createStaticObject(x, y, sprite, collisionGroup, collides){
-    var obj = createObject(x, y, sprite, collisionGroup, collides)
+function createStaticObject(x, y, sprite, collisionGroup, collides, material){
+    var obj = createObject(x, y, sprite, collisionGroup, collides, material)
     obj.body.static = true;
     
     return obj;
 }
 
-function createObject(x, y, sprite, collisionGroup, collides){
+function createObject(x, y, sprite, collisionGroup, collides, material){
     var obj = game.add.sprite(x, y, sprite);
     game.physics.p2.enable(obj);
     obj.body.setCollisionGroup(collisionGroup);
     obj.body.collides(collides);
+    if(material != null)
+        obj.body.setMaterial(material);
     
     return obj;
 }
 
 function createPlayer(x, y, sprite, collisionGroup, collides){
-    var player = createObject(x, y, sprite, collisionGroup, collides)
+    var player = createObject(x, y, sprite, collisionGroup, collides);
     player.body.damping = 0.4;
     player.body.fixedRotation = true;
     player.tint = Math.random() * 0xFFFFFF<<0;
