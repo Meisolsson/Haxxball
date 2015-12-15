@@ -1,0 +1,15 @@
+#main {
+	margin: 0 auto;
+	width: 1200px;	
+}
+
+#github_icon{
+	float: left;
+}
+
+p{
+	font-family: 'Roboto', sans-serif;
+	margin-left: 20px;
+	margin-top: 20px;
+	float: left;
+}

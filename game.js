@@ -1,4 +1,4 @@
-var game = new Phaser.Game(1200, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
+var game = new Phaser.Game(1200, 600, Phaser.AUTO, 'game', { preload: preload, create: create, update: update });
 
 var PLAYER_SPEED_CHANGE = 15;
 var BALL_SPEED_CHANGE = 2;
@@ -21,7 +21,7 @@ var bigText;
 var resetting;
 var contactMaterial;
 
-//misc
+//Misc
 var timer;
 var stateManager;
 var text;
