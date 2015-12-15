@@ -72,6 +72,7 @@ function create() {
     
     ball.body.createGroupCallback(goalCollisionGroup, PlayerScores, this) 
 	ball.body.damping = 0.4;
+    ball.body.mass = 2;
    
     ball.body.fixedRotation = true;
     var contactMaterial = game.physics.p2.createContactMaterial(ballMaterial, fieldMaterial);
