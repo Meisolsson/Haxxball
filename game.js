@@ -25,6 +25,7 @@ var contactMaterial;
 var timer;
 var stateManager;
 var text;
+var kickSound;
 
 function preload() {
 	game.load.image('ground', 'assets/platform.png');
@@ -32,6 +33,7 @@ function preload() {
     game.load.image('ball', 'assets/ball.png');
     game.load.image('side_line_tb', 'assets/sideLineTB.png');
     game.load.image('side_line_lr', 'assets/sideLineLR.png');
+    game.load.audio('kick', 'assets/KICK.ogg');
 }
 
 function create() {
@@ -49,6 +51,8 @@ function create() {
     
     var ballMaterial = game.physics.p2.createMaterial('ballMaterial');
     var fieldMaterial = game.physics.p2.createMaterial('fieldMaterial');
+    kickSound = game.add.audio('kick');
+    
     
     game.physics.p2.updateBoundsCollisionGroup();
     
@@ -85,7 +89,7 @@ function create() {
 function update() {
 	var cursors = game.input.keyboard.createCursorKeys();
     
-    //playertwo
+    //playerone
      if (game.input.keyboard.isDown(Phaser.KeyCode.A) && playerOne.body.velocity.x > -MAX_PLAYER_VELOCITY){
         playerOne.body.velocity.x -= PLAYER_SPEED_CHANGE;
     } if (game.input.keyboard.isDown(Phaser.KeyCode.D) && playerOne.body.velocity.x < MAX_PLAYER_VELOCITY){
@@ -97,7 +101,7 @@ function update() {
     }else if(game.input.keyboard.isDown(Phaser.KeyCode.S) && playerOne.body.velocity.y < MAX_PLAYER_VELOCITY){
 		playerOne.body.velocity.y += PLAYER_SPEED_CHANGE;
 	}
-    //playerone
+    //playertwo
     if (cursors.left.isDown && playerTwo.body.velocity.x > -MAX_PLAYER_VELOCITY){
         playerTwo.body.velocity.x -= PLAYER_SPEED_CHANGE;
     } else if (cursors.right.isDown && playerTwo.body.velocity.x < MAX_PLAYER_VELOCITY){
@@ -117,6 +121,7 @@ function update() {
         var velY = -Math.sin(angle) * BALL_SPEED_CHANGE;
         
         ball.body.applyImpulseLocal([velX, velY], 0 ,0);
+        kickSound.play();
     }
     
     if(game.input.keyboard.isDown(Phaser.KeyCode.SHIFT) && game.math.distance(playerTwo.x, playerTwo.y, ball.x, ball.y) < 46){
@@ -125,13 +130,14 @@ function update() {
         var velY = -Math.sin(angle) * BALL_SPEED_CHANGE;
         
         ball.body.applyImpulseLocal([velX, velY], 0 ,0);
+        kickSound.play();
     }
 }
     
 function PlayerScores(ball, goal, t, v){
     if(resetting)
         return;
-    
+
     if(goal.id == playerOneGoal.body.id){
         playerTwoScore++;
         bigText.setText("Player two scored");
