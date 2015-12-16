@@ -21,11 +21,13 @@ var bigText;
 var resetting;
 var contactMaterial;
 
+//audio
+var kickSound;
+
 //Misc
 var timer;
 var stateManager;
 var text;
-var kickSound;
 
 function preload() {
 	game.load.image('ground', 'assets/platform.png');
@@ -116,7 +118,7 @@ function update() {
 	}
     
     
-    if(game.input.keyboard.isDown(Phaser.KeyCode.SPACEBAR) && game.math.distance(playerOne.x, playerOne.y, ball.x, ball.y) < 46){
+    if(game.input.keyboard.isDown(Phaser.KeyCode.SPACEBAR) && game.math.distance(playerOne.x, playerOne.y, ball.x, ball.y) < 40){
         var angle = game.math.angleBetween(playerOne.x, playerOne.y, ball.x, ball.y);
         var velX = -Math.cos(angle) * BALL_SPEED_CHANGE;
         var velY = -Math.sin(angle) * BALL_SPEED_CHANGE;
@@ -125,7 +127,7 @@ function update() {
         kickSound.play();
     }
     
-    if(game.input.keyboard.isDown(Phaser.KeyCode.SHIFT) && game.math.distance(playerTwo.x, playerTwo.y, ball.x, ball.y) < 46){
+    if(game.input.keyboard.isDown(Phaser.KeyCode.SHIFT) && game.math.distance(playerTwo.x, playerTwo.y, ball.x, ball.y) < 4){
         var angle = game.math.angleBetween(playerTwo.x, playerTwo.y, ball.x, ball.y);
         var velX = -Math.cos(angle) * BALL_SPEED_CHANGE;
         var velY = -Math.sin(angle) * BALL_SPEED_CHANGE;
