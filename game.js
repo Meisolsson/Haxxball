@@ -1,8 +1,8 @@
 var game = new Phaser.Game(1200, 600, Phaser.AUTO, 'game', { preload: preload, create: create, update: update });
 
-var PLAYER_SPEED_CHANGE = 15;
-var BALL_SPEED_CHANGE = 2;
-var MAX_PLAYER_VELOCITY = 100;
+var PLAYER_SPEED_CHANGE = 20;
+var BALL_SPEED_CHANGE = 40;
+var MAX_PLAYER_VELOCITY = 110;
 
 //Players
 var playerOne;
@@ -69,17 +69,17 @@ function create() {
     playerOne = createPlayer(playerOneGoal.x + 100, game.height / 2, 'player', playerCollisionGroup, [ballCollisionGroup, playerCollisionGroup]);
     playerTwo = createPlayer(playerTwoGoal.x - 100, game.height / 2, 'player', playerCollisionGroup, [ballCollisionGroup, playerCollisionGroup]);
     ball = createObject(game.width / 2, game.height / 2, 'ball', ballCollisionGroup, [goalCollisionGroup, playerCollisionGroup, sideLineCollisionGroup], ballMaterial);
-   
-
     
     ball.body.createGroupCallback(goalCollisionGroup, PlayerScores, this) 
 	ball.body.damping = 0.4;
     ball.body.mass = 2;
+    
+    playerOne.body.damping = 0.5;
+    playerTwo.body.damping = 0.5;
    
     ball.body.fixedRotation = true;
     var contactMaterial = game.physics.p2.createContactMaterial(ballMaterial, fieldMaterial);
     contactMaterial.restitution = 0.4;
-
     
     text = game.add.text(game.width / 2, 100, playerOneScore + " - " + playerTwoScore, {"fill":"white"});
     bigText = game.add.text(game.width / 2, game.height / 2, "", {"fill":"white", "fontSize": 64});
@@ -118,16 +118,17 @@ function update() {
 	}
     
     
-    if(game.input.keyboard.isDown(Phaser.KeyCode.SPACEBAR) && game.math.distance(playerOne.x, playerOne.y, ball.x, ball.y) < 40){
+    if(game.input.keyboard.isDown(Phaser.KeyCode.SPACEBAR) && game.math.distance(playerOne.x, playerOne.y, ball.x, ball.y) < 32){
         var angle = game.math.angleBetween(playerOne.x, playerOne.y, ball.x, ball.y);
         var velX = -Math.cos(angle) * BALL_SPEED_CHANGE;
         var velY = -Math.sin(angle) * BALL_SPEED_CHANGE;
         
         ball.body.applyImpulseLocal([velX, velY], 0 ,0);
-        kickSound.play();
+        if(!kickSound.isPlaying)
+            kickSound.play();
     }
     
-    if(game.input.keyboard.isDown(Phaser.KeyCode.SHIFT) && game.math.distance(playerTwo.x, playerTwo.y, ball.x, ball.y) < 4){
+    if(game.input.keyboard.isDown(Phaser.KeyCode.SHIFT) && game.math.distance(playerTwo.x, playerTwo.y, ball.x, ball.y) < 32){
         var angle = game.math.angleBetween(playerTwo.x, playerTwo.y, ball.x, ball.y);
         var velX = -Math.cos(angle) * BALL_SPEED_CHANGE;
         var velY = -Math.sin(angle) * BALL_SPEED_CHANGE;
@@ -137,10 +138,10 @@ function update() {
     }
 }
     
-function PlayerScores(ball, goal, t, v){
+function PlayerScores(ball, goal, ballShape, goalShape){
     if(resetting)
         return;
-
+        
     if(goal.id == playerOneGoal.body.id){
         playerTwoScore++;
         bigText.setText("Player two scored");
@@ -153,6 +154,10 @@ function PlayerScores(ball, goal, t, v){
     
     timer.add(3000, resetField, this);
     timer.start();
+}
+
+function isRightSideOfGoal(goal, ball, side){
+    
 }
 
 function resetField(){
