@@ -134,7 +134,8 @@ function update() {
         var velY = -Math.sin(angle) * BALL_SPEED_CHANGE;
         
         ball.body.applyImpulseLocal([velX, velY], 0 ,0);
-        kickSound.play();
+        if(!kickSound.isPlaying)
+            kickSound.play();
     }
 }
     
