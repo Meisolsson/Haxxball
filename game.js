@@ -143,9 +143,13 @@ function PlayerScores(ball, goal, ballShape, goalShape){
         return;
         
     if(goal.id == playerOneGoal.body.id){
+        if(!isRightSideOfGoal(goal, ball, 1))
+            return;
         playerTwoScore++;
         bigText.setText("Player two scored");
     }else{ 
+        if(!isRightSideOfGoal(goal, ball, 0))
+            return;
         playerOneScore++;
         bigText.setText("Player one scored");
     }
@@ -157,7 +161,13 @@ function PlayerScores(ball, goal, ballShape, goalShape){
 }
 
 function isRightSideOfGoal(goal, ball, side){
-    
+    console.log(goal);
+    console.log(ball);
+    console.log(side);
+    if(side == 0)
+        return goal.x > ball.x && ball.y > (goal.y - 100) && ball.y < (goal.y + 100);
+    else
+        return goal.x < ball.x && ball.y > (goal.y - 100) && ball.y < (goal.y + 100);
 }
 
 function resetField(){
