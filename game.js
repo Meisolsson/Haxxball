@@ -1,8 +1,8 @@
 var game = new Phaser.Game(1200, 600, Phaser.AUTO, 'game', { preload: preload, create: create, update: update });
 
-var PLAYER_SPEED_CHANGE = 20;
+var PLAYER_SPEED_CHANGE = 10;
 var BALL_SPEED_CHANGE = 40;
-var MAX_PLAYER_VELOCITY = 110;
+var MAX_PLAYER_VELOCITY = 100;
 
 //Players
 var playerOne;
@@ -73,9 +73,6 @@ function create() {
     ball.body.createGroupCallback(goalCollisionGroup, PlayerScores, this) 
 	ball.body.damping = 0.4;
     ball.body.mass = 2;
-    
-    playerOne.body.damping = 0.5;
-    playerTwo.body.damping = 0.5;
    
     ball.body.fixedRotation = true;
     var contactMaterial = game.physics.p2.createContactMaterial(ballMaterial, fieldMaterial);
@@ -201,7 +198,8 @@ function createObject(x, y, sprite, collisionGroup, collides, material){
 
 function createPlayer(x, y, sprite, collisionGroup, collides){
     var player = createObject(x, y, sprite, collisionGroup, collides);
-    player.body.damping = 0.99;
+    player.body.damping = 0.98;
+    player.body.mass = 10;
     player.body.fixedRotation = true;
     player.tint = Math.random() * 0xFFFFFF<<0;
     
