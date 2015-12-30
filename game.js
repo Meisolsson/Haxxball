@@ -1,7 +1,7 @@
 var game = new Phaser.Game(1200, 600, Phaser.AUTO, 'game', { preload: preload, create: create, update: update });
 
 var PLAYER_SPEED_CHANGE = 10;
-var BALL_SPEED_CHANGE = 40;
+var BALL_SPEED_CHANGE = 35;
 var MAX_PLAYER_VELOCITY = 100;
 
 //Players
@@ -71,7 +71,7 @@ function create() {
     ball = createObject(game.width / 2, game.height / 2, 'ball', ballCollisionGroup, [goalCollisionGroup, playerCollisionGroup, sideLineCollisionGroup], ballMaterial);
     
     ball.body.createGroupCallback(goalCollisionGroup, PlayerScores, this) 
-	ball.body.damping = 0.4;
+	ball.body.damping = 0.5;
     ball.body.mass = 2;
    
     ball.body.fixedRotation = true;
@@ -159,9 +159,6 @@ function PlayerScores(ball, goal, ballShape, goalShape){
 }
 
 function isRightSideOfGoal(goal, ball, side){
-    console.log(goal);
-    console.log(ball);
-    console.log(side);
     if(side == 0)
         return goal.x > ball.x && ball.y > (goal.y - 100) && ball.y < (goal.y + 100);
     else
